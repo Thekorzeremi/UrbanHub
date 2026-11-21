@@ -194,6 +194,11 @@ docker compose up -d --build
 ```
 Dashboard : [http://localhost:8866](http://localhost:8866) | Jupyter : [http://localhost:8888](http://localhost:8888) | Console MinIO : [http://localhost:9001](http://localhost:9001).
 
+**Si le dashboard ne s'affiche pas correctement :**
+- Le message rouge « Data Lake injoignable » ou « bucket introuvable » signifie que le `.env` n'a pas les bonnes clés R2 : corriger `MINIO_ENDPOINT`, `MINIO_ACCESS_KEY`, `MINIO_SECRET_KEY`, `MINIO_SECURE=true` et les trois noms de buckets `urbanhub-*`, puis `docker compose restart dashboard`.
+- Voilà ne relit le notebook qu'au démarrage du conteneur : après un `git pull`, faire `docker compose restart dashboard` pour afficher la nouvelle version.
+- La première ouverture d'une ville peut prendre jusqu'à une minute et demie ; les suivantes sont plus rapides.
+
 ### 4. Initialiser et tester le Data Lake
 ```powershell
 docker compose exec jupyter python scripts/init_datalake.py
