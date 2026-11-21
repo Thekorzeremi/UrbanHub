@@ -67,3 +67,11 @@ Le quota gratuit de R2 est de 10 Go : à ce rythme, environ 3 semaines de collec
 1. Le dashboard ([http://localhost:8866](http://localhost:8866)) affiche une ligne « À jour » pour la météo, la mobilité et la pollution.
 2. `docker compose --profile collect ps` montre les trois services en état `Up`.
 3. Après quelques heures, relancer `notebooks/04_analyses_mobilite.ipynb` : le nombre d'heures observées augmente et les messages `[ATTENTION]` disparaissent section par section.
+
+## <img src="assets/icons/alert.svg" width="18" height="18" alt=""> Point d'attention : le code des collecteurs est celui de votre dossier
+
+Les services Docker montent le dossier du projet (`.:/app`). Le collecteur exécute donc **le code de la branche actuellement extraite sur la machine qui le fait tourner**. Changer de branche, ou se placer sur une branche en retard, fait exécuter l'ancien code au cycle suivant : le 21/11/2026, la pollution est restée figée à la veille parce que le collecteur OpenAQ a tourné avec une version d'avant le correctif de pagination, alors que l'API avait des données plus récentes.
+
+- Sur la machine de collecte, rester sur `main` à jour (`git pull --rebase`) et ne pas y développer.
+- Après un changement de branche ou un `git pull`, relancer les collecteurs : `docker compose --profile collect restart`.
+- Pour vérifier la fraîcheur : le tableau du dashboard, ou `docker compose logs --tail 40 collector-openaq` (le message « Silver incrémental » indique le code à jour).
